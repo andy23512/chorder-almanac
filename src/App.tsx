@@ -45,9 +45,15 @@ export default function App() {
     try {
       // skipFonts: use system fonts only and skip html-to-image's font embedding
       // (that step is slow and can hang).
+      // Fill the rounded-corner gaps with the current theme's paper color so the
+      // PNG matches light or dark mode.
+      const paper =
+        getComputedStyle(document.documentElement)
+          .getPropertyValue("--paper")
+          .trim() || "#f4ece0";
       const dataUrl = await toPng(sheetRef.current, {
         pixelRatio: 2,
-        backgroundColor: "#f4ece0",
+        backgroundColor: paper,
         skipFonts: true,
       });
       const a = document.createElement("a");
