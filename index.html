@@ -28,6 +28,14 @@
       content="A daily almanac for CharaChorder users: the day's Do / Don't for chorders, a lucky fortune, and moments from typing history."
     />
     <meta name="twitter:image" content="https://andy23512.github.io/chorder-almanac/og-image.png" />
+    <!-- Apply the saved theme before first paint to avoid a flash of the wrong theme -->
+    <script>
+      try {
+        var t = localStorage.getItem('theme')
+        if (t === 'light' || t === 'dark')
+          document.documentElement.setAttribute('data-theme', t)
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

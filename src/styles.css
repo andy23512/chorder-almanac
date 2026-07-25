@@ -19,9 +19,10 @@
   --shadow: rgba(60, 40, 20, 0.18);
 }
 
-/* Dark theme: follows the system's prefers-color-scheme */
+/* Dark palette, reused below. Applied when either the system prefers dark
+   (and the user hasn't forced light), or the user explicitly picked dark. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     color-scheme: dark;
     --bg-1: #1b1714;
     --bg-2: #100e0b;
@@ -40,6 +41,29 @@
     --line: #453a2b;
     --shadow: rgba(0, 0, 0, 0.55);
   }
+}
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg-1: #1b1714;
+  --bg-2: #100e0b;
+  --paper: #241e17;
+  --paper-edge: #342b20;
+  --panel: #2c2417;
+  --panel-hover: #382f1e;
+  --ink: #ece1cf;
+  --ink-soft: #a4917b;
+  --red: #e65c52;
+  --red-deep: #f2988f;
+  --do-solid: #35804f;
+  --dont-solid: #c43a30;
+  --gold: #d8ac54;
+  --green: #77c78d;
+  --line: #453a2b;
+  --shadow: rgba(0, 0, 0, 0.55);
+}
+/* Explicit light choice must win even when the system prefers dark */
+:root[data-theme='light'] {
+  color-scheme: light;
 }
 
 * {
@@ -112,6 +136,9 @@ body {
 .toolbar .today-btn {
   border-color: var(--red);
   color: var(--red-deep);
+}
+.toolbar .theme-btn {
+  min-width: 104px;
 }
 
 /* ---- Almanac sheet ---- */

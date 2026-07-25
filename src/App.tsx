@@ -20,8 +20,37 @@ function dateFromUrl(): Date | null {
   return Number.isNaN(dt.getTime()) ? null : dt;
 }
 
+type Theme = "system" | "light" | "dark";
+const THEMES: Theme[] = ["system", "light", "dark"];
+const THEME_LABEL: Record<Theme, string> = {
+  system: "🖥️ System",
+  light: "☀️ Light",
+  dark: "🌙 Dark",
+};
+
+// Persisted theme choice; defaults to following the system (prefers-color-scheme).
+function readTheme(): Theme {
+  const t = localStorage.getItem("theme");
+  return t === "light" || t === "dark" ? t : "system";
+}
+
 export default function App() {
   const [date, setDate] = useState<Date>(() => dateFromUrl() ?? startOfToday());
+  const [theme, setTheme] = useState<Theme>(() => readTheme());
+
+  // Apply the theme by toggling data-theme on <html>; "system" clears it so the
+  // CSS prefers-color-scheme media query takes over. Persist the choice.
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === "system") root.removeAttribute("data-theme");
+    else root.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  function cycleTheme() {
+    setTheme((t) => THEMES[(THEMES.indexOf(t) + 1) % THEMES.length]);
+  }
+
   const almanac = useMemo(() => buildAlmanac(date), [date]);
   const { fortune, history, doItems, dontItems } = almanac;
 
@@ -108,6 +137,14 @@ export default function App() {
           disabled={isToday}
         >
           Today
+        </button>
+        <button
+          className="theme-btn"
+          onClick={cycleTheme}
+          aria-label={`Theme: ${theme}. Click to switch.`}
+          title="Switch theme (System / Light / Dark)"
+        >
+          {THEME_LABEL[theme]}
         </button>
       </div>
 
