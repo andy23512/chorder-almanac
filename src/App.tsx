@@ -1,96 +1,106 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { toPng } from 'html-to-image'
-import { buildAlmanac, toIso } from './lib/almanac'
+import { toPng } from "html-to-image";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { buildAlmanac, toIso } from "./lib/almanac";
 
 function startOfToday(): Date {
-  const n = new Date()
-  return new Date(n.getFullYear(), n.getMonth(), n.getDate())
+  const n = new Date();
+  return new Date(n.getFullYear(), n.getMonth(), n.getDate());
 }
 
 function addDays(d: Date, delta: number): Date {
-  return new Date(d.getFullYear(), d.getMonth(), d.getDate() + delta)
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate() + delta);
 }
 
 // Read a date from the URL's ?d=YYYY-MM-DD (for shareable links).
 function dateFromUrl(): Date | null {
-  const raw = new URLSearchParams(window.location.search).get('d')
-  if (!raw || !/^\d{4}-\d{2}-\d{2}$/.test(raw)) return null
-  const [y, m, dd] = raw.split('-').map(Number)
-  const dt = new Date(y, m - 1, dd)
-  return Number.isNaN(dt.getTime()) ? null : dt
+  const raw = new URLSearchParams(window.location.search).get("d");
+  if (!raw || !/^\d{4}-\d{2}-\d{2}$/.test(raw)) return null;
+  const [y, m, dd] = raw.split("-").map(Number);
+  const dt = new Date(y, m - 1, dd);
+  return Number.isNaN(dt.getTime()) ? null : dt;
 }
 
 export default function App() {
-  const [date, setDate] = useState<Date>(() => dateFromUrl() ?? startOfToday())
-  const almanac = useMemo(() => buildAlmanac(date), [date])
-  const { fortune, history, doItems, dontItems } = almanac
+  const [date, setDate] = useState<Date>(() => dateFromUrl() ?? startOfToday());
+  const almanac = useMemo(() => buildAlmanac(date), [date]);
+  const { fortune, history, doItems, dontItems } = almanac;
 
-  const isToday = almanac.isoDate === toIso(startOfToday())
+  const isToday = almanac.isoDate === toIso(startOfToday());
 
-  const sheetRef = useRef<HTMLDivElement>(null)
-  const [copied, setCopied] = useState(false)
-  const [busy, setBusy] = useState(false)
+  const sheetRef = useRef<HTMLDivElement>(null);
+  const [copied, setCopied] = useState(false);
+  const [busy, setBusy] = useState(false);
 
   // Keep the URL in sync with the date so the current page is copy-and-shareable.
   useEffect(() => {
-    const url = `${window.location.pathname}?d=${almanac.isoDate}`
-    window.history.replaceState(null, '', url)
-  }, [almanac.isoDate])
+    const url = `${window.location.pathname}?d=${almanac.isoDate}`;
+    window.history.replaceState(null, "", url);
+  }, [almanac.isoDate]);
 
-  const shareUrl = `${window.location.origin}${window.location.pathname}?d=${almanac.isoDate}`
+  const shareUrl = `${window.location.origin}${window.location.pathname}?d=${almanac.isoDate}`;
 
   async function handleDownload() {
-    if (!sheetRef.current || busy) return
-    setBusy(true)
+    if (!sheetRef.current || busy) return;
+    setBusy(true);
     try {
       // skipFonts: use system fonts only and skip html-to-image's font embedding
       // (that step is slow and can hang).
       const dataUrl = await toPng(sheetRef.current, {
         pixelRatio: 2,
-        backgroundColor: '#f4ece0',
+        backgroundColor: "#f4ece0",
         skipFonts: true,
-      })
-      const a = document.createElement('a')
-      a.download = `chorders-almanac-${almanac.isoDate}.png`
-      a.href = dataUrl
-      a.click()
+      });
+      const a = document.createElement("a");
+      a.download = `chorders-almanac-${almanac.isoDate}.png`;
+      a.href = dataUrl;
+      a.click();
     } catch (err) {
-      console.error('Failed to generate image', err)
-      window.alert('Could not generate the image. Please try again.')
+      console.error("Failed to generate image", err);
+      window.alert("Could not generate the image. Please try again.");
     } finally {
-      setBusy(false)
+      setBusy(false);
     }
   }
 
   async function handleCopyLink() {
     try {
-      await navigator.clipboard.writeText(shareUrl)
-      setCopied(true)
-      window.setTimeout(() => setCopied(false), 1600)
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1600);
     } catch {
       // Some browsers need a user gesture or HTTPS; fall back to a manual prompt.
-      window.prompt('Copy this link to share:', shareUrl)
+      window.prompt("Copy this link to share:", shareUrl);
     }
   }
 
   return (
     <div className="app">
       <div className="toolbar">
-        <button onClick={() => setDate((d) => addDays(d, -1))} aria-label="Previous day">
+        <button
+          onClick={() => setDate((d) => addDays(d, -1))}
+          aria-label="Previous day"
+        >
           ‹ Prev
         </button>
         <input
           type="date"
           value={almanac.isoDate}
           onChange={(e) => {
-            const [y, m, dd] = e.target.value.split('-').map(Number)
-            if (y && m && dd) setDate(new Date(y, m - 1, dd))
+            const [y, m, dd] = e.target.value.split("-").map(Number);
+            if (y && m && dd) setDate(new Date(y, m - 1, dd));
           }}
         />
-        <button onClick={() => setDate((d) => addDays(d, 1))} aria-label="Next day">
+        <button
+          onClick={() => setDate((d) => addDays(d, 1))}
+          aria-label="Next day"
+        >
           Next ›
         </button>
-        <button className="today-btn" onClick={() => setDate(startOfToday())} disabled={isToday}>
+        <button
+          className="today-btn"
+          onClick={() => setDate(startOfToday())}
+          disabled={isToday}
+        >
           Today
         </button>
       </div>
@@ -101,7 +111,6 @@ export default function App() {
           <div className="brand">
             CHORDER’S
             <span>ALMANAC</span>
-            <small>⚓</small>
           </div>
           <div className="big-date">
             <div className="day">{date.getDate()}</div>
@@ -190,8 +199,8 @@ export default function App() {
         )}
 
         <div className="foot">
-          Do / Don’t and the fortune are generated deterministically from the date
-          (for entertainment only).
+          Do / Don’t and the fortune are generated deterministically from the
+          date (for entertainment only).
           <br />
           On-this-day entries are only included when the exact date is verified.
         </div>
@@ -200,10 +209,12 @@ export default function App() {
       {/* Share bar */}
       <div className="share-bar">
         <button onClick={handleDownload} disabled={busy}>
-          {busy ? 'Generating…' : '🖼️ Download image'}
+          {busy ? "Generating…" : "🖼️ Download image"}
         </button>
-        <button onClick={handleCopyLink}>{copied ? '✓ Link copied' : '🔗 Copy link'}</button>
+        <button onClick={handleCopyLink}>
+          {copied ? "✓ Link copied" : "🔗 Copy link"}
+        </button>
       </div>
     </div>
-  )
+  );
 }
