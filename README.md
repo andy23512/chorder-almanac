@@ -1,4 +1,4 @@
-# Chorder's Almanac ⚓
+# Chorder's Almanac
 
 A daily almanac for **CharaChorder** users — inspired by the old farmer's almanac.
 Check each day's **Do / Don't** for chorders, a lucky **fortune**, and a verified
