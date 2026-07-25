@@ -1,10 +1,12 @@
 // The fortune pools, all drawn deterministically from the date (for fun only).
 
-// Lucky layout of the day (all real keyboard layouts, plus the chording default).
-export const LUCKY_LAYOUTS: readonly string[] = [
-  'QWERTY', 'Dvorak', 'Colemak', 'Colemak-DH', 'Workman', 'Norman',
-  'AZERTY', 'QWERTZ', 'Colemak Mod-DH', 'Halmak', 'BEAKL', 'MTGAP',
-  'CC English (CharaChorder One default)', 'Stenotype',
+// Lucky CharaChorder device of the day (real CharaChorder input devices).
+export const LUCKY_CC_DEVICES: readonly string[] = [
+  'CharaChorder One',
+  'CharaChorder Lite',
+  'CharaChorder X',
+  'CharaChorder Two',
+  'Master Forge',
 ]
 
 // The finger the omens favor today.

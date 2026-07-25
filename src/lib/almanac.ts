@@ -2,7 +2,7 @@
 import { makeRng, pickN, pickOne } from './rng'
 import { DO, DONT, type YiJiItem } from '../data/yiji'
 import {
-  LUCKY_LAYOUTS,
+  LUCKY_CC_DEVICES,
   LUCKY_FINGERS,
   CLASH_NEMESES,
   AUSPICIOUS_HOURS,
@@ -12,7 +12,7 @@ import {
 import { historyOf, type HistoryEvent } from '../data/history'
 
 export interface Fortune {
-  luckyLayout: string
+  luckyDevice: string
   luckyFinger: string
   luckyKeycap: string
   luckyNumber: number
@@ -56,7 +56,7 @@ export function buildAlmanac(date: Date): AlmanacDay {
   const dontItems = pickN(rng, DONT, 4)
 
   const fortune: Fortune = {
-    luckyLayout: pickOne(rng, LUCKY_LAYOUTS),
+    luckyDevice: pickOne(rng, LUCKY_CC_DEVICES),
     luckyFinger: pickOne(rng, LUCKY_FINGERS),
     luckyKeycap: pickOne(rng, LUCKY_KEYCAPS),
     luckyNumber: Math.floor(rng() * 100),

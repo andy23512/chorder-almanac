@@ -198,8 +198,8 @@ export default function App() {
         <div className="fortune">
           <div className="fortune-grid">
             <div className="cell">
-              <div className="label">Lucky Layout</div>
-              <div className="value">{fortune.luckyLayout}</div>
+              <div className="label">Lucky CC Device</div>
+              <div className="value">{fortune.luckyDevice}</div>
             </div>
             <div className="cell">
               <div className="label">Lucky Finger</div>
