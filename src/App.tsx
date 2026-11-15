@@ -246,6 +246,14 @@ export default function App() {
           date (for entertainment only).
           <br />
           On-this-day entries are only included when the exact date is verified.
+          <br />
+          <a
+            href="https://github.com/andy23512/chorder-almanac"
+            target="_blank"
+            rel="noopener"
+          >
+            Source on GitHub
+          </a>
         </div>
       </div>
 

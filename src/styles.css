@@ -406,6 +406,11 @@ body {
   line-height: 1.7;
 }
 
+.foot a {
+  color: inherit;
+  text-decoration: underline;
+}
+
 /* ---- Share bar ---- */
 .share-bar {
   display: flex;
