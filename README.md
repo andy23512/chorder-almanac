@@ -1,5 +1,7 @@
 # Chorder's Almanac
 
+[![CI](https://github.com/andy23512/chorder-almanac/actions/workflows/ci.yml/badge.svg)](https://github.com/andy23512/chorder-almanac/actions/workflows/ci.yml)
+
 A daily almanac for **CharaChorder** users — inspired by the old farmer's almanac.
 Check each day's **Do / Don't** for chorders, a lucky **fortune**, and a verified
 moment from **typing history**.
